@@ -1,0 +1,613 @@
+2025-03-17T22:38:53+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-17T22:38:53+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-17T22:38:53+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-17T22:38:53+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-17T22:38:53+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-17T22:38:53+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-17T22:38:53+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-17T22:42:23+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-17T22:42:23+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-17T22:42:23+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-17T22:42:23+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-17T22:42:23+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-17T22:42:23+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-17T22:42:23+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-17T22:42:23+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-17T22:42:32+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-17T22:42:32+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-17T22:42:32+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-17T22:42:32+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-17T22:42:32+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-17T22:42:32+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-17T22:42:32+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-17T22:42:32+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-17T22:42:32+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-17T22:42:32+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:42:32+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-17T22:42:32+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-17T22:42:32+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-17T22:42:32+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:91
+testing.tRunner
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:1792
+2025-03-17T22:42:32+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-17T22:42:32+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-17T22:42:32+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-17T22:42:32+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:42:32+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:42:32+08:00	warn	proxy/http_proxy.go:340	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-17T22:42:32+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-17T22:42:32+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-17T22:42:32+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:42:32+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:42:32+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:61139", "env": "stable", "method": "GET"}
+2025-03-17T22:42:32+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:61139"}
+2025-03-17T22:42:32+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:42:32+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:42:32+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-17T22:42:32+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:61141"}
+2025-03-17T22:42:32+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-17T22:42:32+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:61143"}
+2025-03-17T22:42:32+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-17T22:42:32+08:00	info	proxy/websocket_pool.go:110	WebSocket pool cleanup routine stopped
+2025-03-17T22:56:11+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:56:11+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:56:11+08:00	warn	proxy/http_proxy.go:340	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-17T22:56:11+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-17T22:56:11+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-17T22:56:11+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:56:11+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:56:11+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:63079", "env": "stable", "method": "GET"}
+2025-03-17T22:56:11+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:63079"}
+2025-03-17T22:56:11+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:56:11+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:56:34+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:56:34+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:56:34+08:00	warn	proxy/http_proxy.go:340	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-17T22:56:34+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-17T22:56:34+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-17T22:56:34+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:56:34+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:56:34+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:63123", "env": "stable", "method": "GET"}
+2025-03-17T22:56:34+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:63123"}
+2025-03-17T22:56:34+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:56:34+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:56:47+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-17T22:56:47+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-17T22:56:47+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-17T22:56:47+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-17T22:56:47+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-17T22:56:47+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-17T22:56:47+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-17T22:56:47+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-17T22:56:47+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-17T22:56:47+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:56:47+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-17T22:56:47+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-17T22:56:47+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-17T22:56:47+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:91
+testing.tRunner
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:1792
+2025-03-17T22:56:47+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-17T22:56:47+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-17T22:56:47+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-17T22:56:47+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:56:47+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:56:47+08:00	warn	proxy/http_proxy.go:340	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-17T22:56:47+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-17T22:56:47+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-17T22:56:47+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:56:47+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:56:47+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:63158", "env": "stable", "method": "GET"}
+2025-03-17T22:56:47+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:63158"}
+2025-03-17T22:56:47+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-17T22:56:47+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-17T22:56:47+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-17T22:56:47+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:63160"}
+2025-03-17T22:56:47+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-17T22:56:47+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:63162"}
+2025-03-17T22:56:47+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T14:56:39+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T14:56:39+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T14:56:39+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T14:56:39+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T14:56:39+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T14:56:39+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T14:56:39+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T14:56:39+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T14:56:39+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:56:39+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:56:39+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:56:39+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T14:56:39+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T14:56:39+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/Cellar/go/1.24.1/libexec/src/testing/testing.go:1792
+2025-03-18T14:56:39+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:56:39+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T14:56:39+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T14:56:39+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:56:39+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:56:39+08:00	warn	proxy/http_proxy.go:340	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T14:56:39+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T14:56:39+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T14:56:39+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:56:39+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:56:39+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:64360", "env": "stable", "method": "GET"}
+2025-03-18T14:56:39+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:64360"}
+2025-03-18T14:56:39+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:56:39+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:56:39+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T14:56:39+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:64362"}
+2025-03-18T14:56:39+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T14:56:39+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:64364"}
+2025-03-18T14:56:39+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T14:56:39+08:00	info	proxy/websocket_pool.go:110	WebSocket pool cleanup routine stopped
+2025-03-18T14:59:04+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T14:59:04+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T14:59:04+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T14:59:04+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T14:59:04+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T14:59:04+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T14:59:04+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T14:59:04+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T14:59:04+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:59:04+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:04+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:59:04+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T14:59:04+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T14:59:04+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/Cellar/go/1.24.1/libexec/src/testing/testing.go:1792
+2025-03-18T14:59:04+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:59:04+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T14:59:04+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T14:59:04+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:04+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:59:04+08:00	warn	proxy/http_proxy.go:340	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T14:59:04+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T14:59:04+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T14:59:04+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:04+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:59:04+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:64706", "env": "stable", "method": "GET"}
+2025-03-18T14:59:04+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:64706"}
+2025-03-18T14:59:04+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:04+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:59:04+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T14:59:04+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:64708"}
+2025-03-18T14:59:04+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T14:59:04+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:64710"}
+2025-03-18T14:59:04+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T14:59:04+08:00	info	proxy/websocket_pool.go:110	WebSocket pool cleanup routine stopped
+2025-03-18T14:59:29+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T14:59:29+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T14:59:29+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T14:59:29+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T14:59:29+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T14:59:29+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T14:59:29+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T14:59:29+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T14:59:29+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:59:29+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:29+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:59:29+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T14:59:29+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T14:59:29+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:1792
+2025-03-18T14:59:29+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:59:29+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T14:59:29+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T14:59:29+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:29+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:59:29+08:00	warn	proxy/http_proxy.go:340	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T14:59:29+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T14:59:29+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T14:59:29+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:29+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:59:29+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:64790", "env": "stable", "method": "GET"}
+2025-03-18T14:59:29+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:64790"}
+2025-03-18T14:59:29+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:29+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:59:29+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T14:59:29+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:64792"}
+2025-03-18T14:59:29+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T14:59:29+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:64794"}
+2025-03-18T14:59:29+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T14:59:29+08:00	info	proxy/websocket_pool.go:110	WebSocket pool cleanup routine stopped
+2025-03-18T14:59:44+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T14:59:44+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T14:59:44+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T14:59:44+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T14:59:44+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T14:59:44+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T14:59:44+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T14:59:44+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T14:59:44+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:59:44+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:44+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:59:44+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T14:59:44+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T14:59:44+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:1792
+2025-03-18T14:59:44+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T14:59:44+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T14:59:44+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T14:59:44+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:44+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:59:44+08:00	warn	proxy/http_proxy.go:340	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T14:59:44+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T14:59:44+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T14:59:44+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:44+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:59:44+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:64825", "env": "stable", "method": "GET"}
+2025-03-18T14:59:44+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:64825"}
+2025-03-18T14:59:44+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T14:59:44+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T14:59:44+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T14:59:44+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:64827"}
+2025-03-18T14:59:44+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T14:59:44+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:64829"}
+2025-03-18T14:59:44+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T14:59:44+08:00	info	proxy/websocket_pool.go:110	WebSocket pool cleanup routine stopped
+2025-03-18T15:00:15+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:00:15+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:00:22+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T15:00:22+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T15:00:22+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:00:22+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T15:00:22+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T15:00:22+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T15:00:22+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T15:00:22+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T15:00:22+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:00:22+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:00:22+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:00:22+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T15:00:22+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T15:00:22+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:1792
+2025-03-18T15:00:22+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:00:22+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T15:00:22+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T15:00:22+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:00:22+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:00:22+08:00	warn	proxy/http_proxy.go:340	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T15:00:22+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:00:22+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T15:00:22+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:00:22+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:00:22+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:64929", "env": "stable", "method": "GET"}
+2025-03-18T15:00:22+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:64929"}
+2025-03-18T15:00:22+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:00:22+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:00:22+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:00:22+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:64931"}
+2025-03-18T15:00:22+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:00:22+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:64933"}
+2025-03-18T15:00:22+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T15:00:22+08:00	info	proxy/websocket_pool.go:110	WebSocket pool cleanup routine stopped
+2025-03-18T15:00:29+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T15:00:29+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T15:00:29+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:00:29+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T15:00:29+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T15:00:29+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T15:00:29+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T15:00:29+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T15:00:29+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:00:29+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:00:29+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:00:29+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T15:00:29+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T15:00:29+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:1792
+2025-03-18T15:00:29+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:00:29+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T15:00:29+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T15:00:29+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:00:29+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:00:29+08:00	warn	proxy/http_proxy.go:340	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T15:00:29+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:00:29+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T15:00:29+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:00:29+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:00:29+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:64999", "env": "stable", "method": "GET"}
+2025-03-18T15:00:29+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:64999"}
+2025-03-18T15:00:29+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:00:29+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:00:29+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:00:29+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:65001"}
+2025-03-18T15:00:29+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:00:29+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:65003"}
+2025-03-18T15:00:29+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T15:04:03+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:04:03+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T15:04:03+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T15:04:03+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:1792
+2025-03-18T15:04:26+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:04:26+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:1792
+2025-03-18T15:04:39+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T15:04:39+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T15:04:39+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:04:39+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T15:04:39+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T15:04:39+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T15:04:39+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T15:04:39+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T15:04:39+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:04:39+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:04:39+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:04:39+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T15:04:39+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T15:04:39+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/opt/go/libexec/src/testing/testing.go:1792
+2025-03-18T15:04:39+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:04:39+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T15:04:39+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T15:04:39+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:04:39+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:04:39+08:00	warn	proxy/http_proxy.go:344	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T15:04:39+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:04:39+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T15:04:39+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:04:39+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:04:39+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:49437", "env": "stable", "method": "GET"}
+2025-03-18T15:04:39+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:49437"}
+2025-03-18T15:04:39+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:04:39+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:04:39+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:04:39+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49439"}
+2025-03-18T15:04:39+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:04:39+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49441"}
+2025-03-18T15:04:39+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T15:04:46+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T15:04:46+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T15:04:46+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:04:46+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T15:04:46+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T15:04:46+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T15:04:46+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T15:04:46+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T15:04:46+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:04:46+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:04:46+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:04:46+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T15:04:46+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T15:04:46+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/Cellar/go/1.24.1/libexec/src/testing/testing.go:1792
+2025-03-18T15:04:46+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:04:46+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T15:04:46+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T15:04:46+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:04:46+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:04:46+08:00	warn	proxy/http_proxy.go:344	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T15:04:46+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:04:46+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T15:04:46+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:04:46+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:04:46+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:49463", "env": "stable", "method": "GET"}
+2025-03-18T15:04:46+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:49463"}
+2025-03-18T15:04:46+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:04:46+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:04:46+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:04:46+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49465"}
+2025-03-18T15:04:46+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:04:46+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49467"}
+2025-03-18T15:04:46+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T15:04:46+08:00	info	proxy/websocket_pool.go:110	WebSocket pool cleanup routine stopped
+2025-03-18T15:06:00+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T15:06:00+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T15:06:00+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:06:00+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T15:06:00+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T15:06:00+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T15:06:00+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T15:06:00+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T15:06:00+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:06:00+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:06:00+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:06:00+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T15:06:00+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T15:06:00+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/Cellar/go/1.24.1/libexec/src/testing/testing.go:1792
+2025-03-18T15:06:00+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:06:00+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T15:06:00+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T15:06:00+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:06:00+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:06:00+08:00	warn	proxy/http_proxy.go:344	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T15:06:00+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:06:00+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T15:06:00+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:06:00+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:06:00+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:49674", "env": "stable", "method": "GET"}
+2025-03-18T15:06:00+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:49674"}
+2025-03-18T15:06:00+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:06:00+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:06:00+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:06:00+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49676"}
+2025-03-18T15:06:00+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:06:00+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49678"}
+2025-03-18T15:06:00+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T15:06:00+08:00	info	proxy/websocket_pool.go:110	WebSocket pool cleanup routine stopped
+2025-03-18T15:06:05+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T15:06:05+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T15:06:05+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:06:05+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T15:06:05+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T15:06:05+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T15:06:05+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T15:06:05+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T15:06:05+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:06:05+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:06:05+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:06:05+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T15:06:05+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T15:06:05+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/Cellar/go/1.24.1/libexec/src/testing/testing.go:1792
+2025-03-18T15:06:05+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:06:05+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T15:06:05+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T15:06:05+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:06:05+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:06:05+08:00	warn	proxy/http_proxy.go:344	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T15:06:05+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:06:05+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T15:06:05+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:06:05+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:06:05+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:49693", "env": "stable", "method": "GET"}
+2025-03-18T15:06:05+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:49693"}
+2025-03-18T15:06:05+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:06:05+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:06:05+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:06:05+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49695"}
+2025-03-18T15:06:05+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:06:05+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49697"}
+2025-03-18T15:06:05+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T15:06:05+08:00	info	proxy/websocket_pool.go:110	WebSocket pool cleanup routine stopped
+2025-03-18T15:07:08+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T15:07:08+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T15:07:08+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:07:08+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T15:07:08+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T15:07:08+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T15:07:08+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T15:07:08+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T15:07:08+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:07:08+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:07:08+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:07:08+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T15:07:08+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T15:07:08+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/Cellar/go/1.24.1/libexec/src/testing/testing.go:1792
+2025-03-18T15:07:08+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:07:08+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T15:07:08+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T15:07:08+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:07:08+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:07:08+08:00	warn	proxy/http_proxy.go:344	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T15:07:08+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:07:08+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T15:07:08+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:07:08+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:07:08+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:49887", "env": "stable", "method": "GET"}
+2025-03-18T15:07:08+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:49887"}
+2025-03-18T15:07:08+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:07:08+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:07:08+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:07:08+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49889"}
+2025-03-18T15:07:08+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:07:08+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49891"}
+2025-03-18T15:07:08+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
+2025-03-18T15:07:08+08:00	info	proxy/websocket_pool.go:110	WebSocket pool cleanup routine stopped
+2025-03-18T15:07:12+08:00	info	proxy/grpc_proxy.go:75	Successfully registered gRPC service handler	{"path": "/grpc/hello", "target": "dummy-target"}
+2025-03-18T15:07:12+08:00	info	proxy/grpc_proxy.go:136	gRPC proxy route configured successfully	{"path": "/grpc/hello"}
+2025-03-18T15:07:12+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:07:12+08:00	info	health/health_checker.go:119	Initialized new health check target	{"target": "dummy-target", "protocol": "grpc", "healthCheckPath": "/health"}
+2025-03-18T15:07:12+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 1}
+2025-03-18T15:07:12+08:00	info	proxy/grpc_proxy.go:106	Adjusted gRPC request path by removing prefix	{"originalPath": "/grpc/hello", "adjustedPath": "/hello", "prefix": "/grpc"}
+2025-03-18T15:07:12+08:00	info	proxy/grpc_proxy.go:173	Metadata found in request context	{"metadata": {"request-id":["test-request-id"]}}
+2025-03-18T15:07:12+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "dummy-target"}
+2025-03-18T15:07:12+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:07:12+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:07:12+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:07:12+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "example.com:8080"}
+2025-03-18T15:07:12+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "localhost:8080"}
+2025-03-18T15:07:12+08:00	error	proxy/http_pool.go:69	Failed to normalize target address	{"target": "://invalid", "error": "parse \"://invalid\": missing protocol scheme"}
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.(*HTTPConnectionPool).GetClient
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool.go:69
+github.com/penwyp/mini-gateway/internal/core/routing/proxy.TestGetClient.func1
+	/Users/penwyp/go/src/github.com/penwyp/mini-gateway/internal/core/routing/proxy/http_pool_test.go:92
+testing.tRunner
+	/opt/homebrew/Cellar/go/1.24.1/libexec/src/testing/testing.go:1792
+2025-03-18T15:07:12+08:00	info	proxy/http_pool.go:61	HTTP connection pool initialized successfully	{"initializedTargets": 0}
+2025-03-18T15:07:12+08:00	info	proxy/http_pool.go:80	Dynamically created new HostClient	{"host": "test.com"}
+2025-03-18T15:07:12+08:00	info	proxy/http_pool.go:104	HTTP connection pool closed
+2025-03-18T15:07:12+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:07:12+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:07:12+08:00	warn	proxy/http_proxy.go:344	No target available for request	{"path": "/test", "env": "stable"}
+2025-03-18T15:07:12+08:00	info	health/health_checker.go:55	Initializing health checker service
+2025-03-18T15:07:12+08:00	info	health/health_checker.go:126	Health checker targets refreshed	{"totalTargets": 0}
+2025-03-18T15:07:12+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:07:12+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:07:12+08:00	info	proxy/http_proxy.go:150	Routing HTTP request	{"path": "/test", "target": "http://127.0.0.1:49908", "env": "stable", "method": "GET"}
+2025-03-18T15:07:12+08:00	warn	health/health_checker.go:324	Target not found, unable to update request count	{"target": "http://127.0.0.1:49908"}
+2025-03-18T15:07:12+08:00	info	proxy/http_pool.go:37	HTTP connection pool disabled in configuration
+2025-03-18T15:07:12+08:00	info	loadbalancer/round_robin.go:28	RoundRobin load balancer initialized
+2025-03-18T15:07:12+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:07:12+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49910"}
+2025-03-18T15:07:12+08:00	info	proxy/websocket_pool.go:37	WebSocket connection pool initialized	{"maxIdle": 0, "idleTimeout": 0}
+2025-03-18T15:07:12+08:00	info	proxy/websocket_pool.go:74	Successfully established WebSocket connection	{"target": "ws://127.0.0.1:49912"}
+2025-03-18T15:07:12+08:00	info	proxy/websocket_pool.go:98	WebSocket connection pool closed	{"closedConnections": 0}
