@@ -53,9 +53,11 @@ func NewLeakyBucketLimiter(qps, burst int) *LeakyBucketLimiter {
 	l := &LeakyBucketLimiter{
 		capacity: burst,
 		rate:     float64(qps),
+		// 创建一个容量为 burst 的通道
 		queue:    make(chan struct{}, burst),
 		stopChan: make(chan struct{}),
 	}
+	// 【风险点】每创建一个限流器，就会启动一个后台 Goroutine
 	go l.startLeak()
 	logger.Info("LeakyBucketLimiter initialized",
 		zap.Int("qps", qps),
@@ -64,16 +66,20 @@ func NewLeakyBucketLimiter(qps, burst int) *LeakyBucketLimiter {
 }
 
 func (l *LeakyBucketLimiter) startLeak() {
+	// 1. 设置打点器 (Ticker)
+	// 如果 Rate = 10 (QPS)，那么 interval = 1秒 / 10 = 100毫秒
+	// 也就是每 100ms 触发一次
 	ticker := time.NewTicker(time.Second / time.Duration(l.rate))
 	defer ticker.Stop()
 
 	for {
 		select {
-		case <-ticker.C:
+		case <-ticker.C: // 每 100ms 执行一次
 			l.mutex.Lock()
+			// 如果桶里有水 (len > 0)
 			if len(l.queue) > 0 {
 				select {
-				case <-l.queue:
+				case <-l.queue: // 【核心】从通道里拿走一个，腾出一个空位
 				default:
 				}
 			}
@@ -83,6 +89,8 @@ func (l *LeakyBucketLimiter) startLeak() {
 			return
 		}
 	}
+	//不管请求进来的速度有多快（哪怕一瞬间进来100个），
+	//这个 startLeak 依然慢条斯理地、雷打不动地每 1/Rate 秒腾出一个空位。这就实现了恒定速率。
 }
 
 func (l *LeakyBucketLimiter) Allow() bool {
@@ -90,10 +98,11 @@ func (l *LeakyBucketLimiter) Allow() bool {
 	defer l.mutex.Unlock()
 
 	select {
+	// 尝试往桶里放一个东西 (占座)
 	case l.queue <- struct{}{}:
-		return true
+		return true // 放进去了，允许通行
 	default:
-		return false
+		return false // 桶满了 (Channel 满了)，阻塞了，直接拒绝
 	}
 }
 
@@ -137,27 +146,35 @@ func LeakyBucketRateLimit() gin.HandlerFunc {
 			return
 		}
 
+		// 开启 OpenTelemetry 链路追踪，方便在 Jaeger 里看到限流耗时
 		_, span := leakyBucketTracer.Start(c.Request.Context(), "RateLimit.LeakyBucket",
 			trace.WithAttributes(attribute.String("path", c.Request.URL.Path)))
 		defer span.End()
 
 		// 检查全局限流
+		// --- 第一关：全局限流 (Global) ---
+		// 保护整个网关不被压垮。
+		// 逻辑：如果全局桶存在，且 Allow() 返回 false (桶满了)，则拒绝。
 		if mdl.globalLimiter != nil && !mdl.globalLimiter.Allow() {
 			rejectRequest(c, span, "global", "", cfg.Traffic.RateLimit.QPS, cfg.Traffic.RateLimit.Burst)
 			return
 		}
 
 		// 检查IP限流（这里假设配置中增加了IP限流规则）
+		// --- 第二关：IP 维度限流 (IP) ---
+		// 保护网关不被单个 IP 攻击。
 		clientIP := c.ClientIP()
 		ipQPS := cfg.Traffic.RateLimit.QPS / 2 // 示例：IP限流为全局的一半
 		ipBurst := cfg.Traffic.RateLimit.Burst / 2
 		ipLimiter := mdl.getOrCreateLimiter("ip", clientIP, ipQPS, ipBurst)
 		if !ipLimiter.Allow() {
-			rejectRequest(c, span, "ip", clientIP, ipQPS, ipBurst)
+			rejectRequest(c, span, "ip", clientIP, ipQPS, ipBurst) // 拒绝并标记是被 IP 规则拦下的
 			return
 		}
 
 		// 检查路由限流（这里假设配置中增加了路由限流规则）
+		// --- 第三关：路由维度限流 (Route) ---
+		// 保护特定接口不被刷爆。
 		route := c.Request.URL.Path
 		routeQPS := cfg.Traffic.RateLimit.QPS // 示例：使用全局QPS
 		routeBurst := cfg.Traffic.RateLimit.Burst
@@ -166,13 +183,14 @@ func LeakyBucketRateLimit() gin.HandlerFunc {
 			rejectRequest(c, span, "route", route, routeQPS, routeBurst)
 			return
 		}
-
+		// --- 全部通过 ---
 		span.SetStatus(codes.Ok, "Request allowed by leaky bucket")
-		c.Next()
+		c.Next() // 放行，进入下一个中间件或业务逻辑
 	}
 }
 
 func rejectRequest(c *gin.Context, span trace.Span, dimension, key string, qps, burst int) {
+	//记录日志
 	logger.Warn("Rate limit exceeded with leaky bucket",
 		zap.String("dimension", dimension),
 		zap.String("key", key),
@@ -180,9 +198,12 @@ func rejectRequest(c *gin.Context, span trace.Span, dimension, key string, qps, 
 		zap.String("path", c.Request.URL.Path),
 		zap.Int("qps", qps),
 		zap.Int("burst", burst))
+	//链路追踪状态 (Tracing)
 	span.SetStatus(codes.Error, "Rate limit exceeded")
+	//监控指标
 	observability.RateLimitRejections.WithLabelValues(c.Request.URL.Path).Inc()
 
+	//返回响应 (HTTP Response)
 	c.JSON(http.StatusTooManyRequests, gin.H{
 		"error":     "Request rate limit exceeded",
 		"dimension": dimension,
@@ -190,9 +211,14 @@ func rejectRequest(c *gin.Context, span trace.Span, dimension, key string, qps, 
 		"qps":       qps,
 		"burst":     burst,
 	})
+	//中断请求
 	c.Abort()
 }
 
+// 为什么需要它？
+// 在你的 NewLeakyBucketLimiter 实现中，每创建一个限流器，就会启动一个后台 Goroutine 去不断地从 Channel 里“漏水”。
+// 如果不显式停止它们，当你重载配置（Reload Config）或者优雅关闭服务时，
+// 这些 Goroutine 会一直跑，变成 孤儿协程 (Goroutine Leak)，白白消耗 CPU 和内存。
 func CleanupLeakyBucket(mdl *MultiDimensionalLeakyBucket) {
 	if mdl.globalLimiter != nil {
 		mdl.globalLimiter.Stop()

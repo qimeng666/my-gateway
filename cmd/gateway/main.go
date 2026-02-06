@@ -149,32 +149,41 @@ func (s *Server) handleHealth(c *gin.Context) {
 // handleStatus 处理状态检查请求
 func (s *Server) handleStatus(c *gin.Context) {
 	logger.Info("收到状态检查请求", zap.String("clientIP", c.ClientIP()))
-
+	// --- 第一部分：处理重置请求 ---
+	// 定义一个匿名结构体，用来接收 URL 查询参数（例如 /status?reset=true）
 	var statusReq struct {
 		Reset bool `json:"reset" form:"reset"`
 	}
+	// ShouldBindQuery 解析 URL 中的参数到上面的结构体中
 	if err := c.ShouldBindQuery(&statusReq); err != nil {
 		c.JSON(400, gin.H{"error": "Invalid request payload"})
 		return
 	}
+	// 如果 URL 里带了 reset=true，就重置所有健康检查的统计数据（清空成功/失败计数）
 	if statusReq.Reset {
 		health.GetGlobalHealthChecker().ResetAllStats()
 	}
-
+	// --- 第二部分：收集 Go 运行时指标 ---
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
+	// 组装 GatewayStatus 结构体，显示网关自身的情况
 	gatewayStatus := GatewayStatus{
-		Uptime:         time.Since(startTime).String(),
-		Version:        Version,
-		MemoryAlloc:    m.Alloc,
-		GoroutineCount: runtime.NumGoroutine(),
+		Uptime:         time.Since(startTime).String(), // 运行了多久
+		Version:        Version,                        // 版本号
+		MemoryAlloc:    m.Alloc,                        // 当前分配的内存字节数
+		GoroutineCount: runtime.NumGoroutine(),         // 当前有多少个协程在跑（可以监控是否泄露）
 	}
+	// --- 第三部分：收集业务组件指标 ---
+	backendStats := health.GetGlobalHealthChecker().GetAllStats() // 获取后端微服务（如 8381, 8382）的健康状况
+	cachedStats := s.getCachedPathStats(backendStats)             // 获取 Redis 缓存的命中统计（这行调用的具体逻辑在你代码的其他位置）
+	pluginStatus := getPluginStatus()                             // 获取已加载插件的状态（如 limit, auth 等）
 
-	backendStats := health.GetGlobalHealthChecker().GetAllStats()
-	cachedStats := s.getCachedPathStats(backendStats)
-	pluginStatus := getPluginStatus()
-
+	// --- 第四部分：收集配置快照 ---
 	cfg := s.ConfigMgr.GetConfig()
+	// 获取当前生效的配置对象
+	// ConfigSummary 是一个巨大的结构体，用来把配置文件的内容展现在网页上。
+	// 这里把 cfg 对象里的 Server, Logger, Middleware 等配置项一一映射过来。
+	// 目的：让你在网页上直接看到“当前网关到底是怎么配的”，不需要去服务器 cat config.yaml。
 	configSummary := ConfigSummary{
 		Server: ServerConfigSummary{
 			Port:    cfg.Server.Port,
@@ -223,7 +232,11 @@ func (s *Server) handleStatus(c *gin.Context) {
 			JaegerAddr:        cfg.Observability.Jaeger.HttpEndpoint,
 		},
 	}
-
+	// --- 第五部分：渲染 HTML 页面 ---
+	// 注意这里用的不是 c.JSON，而是 c.HTML。
+	// 200: HTTP 状态码
+	// "status.html": 模板文件名（对应 templates/status.html）
+	// gin.H{...}: 把上面收集到的所有数据（Gateway, BackendStats, ConfigSummary）传给 HTML 模板引擎进行渲染。
 	c.HTML(200, "status.html", gin.H{
 		"Gateway":       gatewayStatus,
 		"BackendStats":  backendStats,
@@ -235,10 +248,13 @@ func (s *Server) handleStatus(c *gin.Context) {
 
 // handleLogin 处理登录请求
 func (s *Server) handleLogin(c *gin.Context) {
+	// 1. 定义请求体结构
 	var creds struct {
 		Username string `json:"username" binding:"required"`
 		Password string `json:"password" binding:"required"`
 	}
+	// 2. 解析 JSON Body
+	// ShouldBindJSON 会读取 HTTP Body 并解析 JSON。如果格式不对（比如没传 password），直接返回错误。
 	if err := c.ShouldBindJSON(&creds); err != nil {
 		logger.Warn("无效的登录请求", zap.Error(err))
 		c.JSON(400, gin.H{"error": "Invalid request"})
@@ -250,10 +266,11 @@ func (s *Server) handleLogin(c *gin.Context) {
 		c.JSON(401, gin.H{"error": "Invalid credentials"})
 		return
 	}
-
+	// 4. 根据配置生成不同类型的 Token
 	cfg := s.ConfigMgr.GetConfig()
 	switch cfg.Security.AuthMode {
 	case "jwt":
+		// 如果模式是 JWT，调用 security 包生成标准 JWT Token
 		token, err := security.GenerateToken(creds.Username)
 		if err != nil {
 			logger.Error("生成 JWT token 失败", zap.Error(err))
@@ -262,40 +279,56 @@ func (s *Server) handleLogin(c *gin.Context) {
 		}
 		c.JSON(200, gin.H{"token": token})
 	case "rbac":
+		// 如果模式是 RBAC（基于角色的访问控制），生成包含角色信息的 Token
 		token, err := security.GenerateRBACLoginToken(creds.Username)
 		if err != nil {
 			logger.Error("生成 RBAC token 失败", zap.Error(err))
 			c.JSON(500, gin.H{"error": "Server error"})
 			return
 		}
+		// 返回 token 和 username
 		c.JSON(200, gin.H{"token": token, "username": creds.Username})
 	default:
+		// 如果没配 AuthMode 或者模式未知，仅返回成功消息，不发 Token（相当于不开启安全验证）
 		c.JSON(200, gin.H{"message": "Login successful", "username": creds.Username})
 	}
 }
 
 // handleAddRoute 处理添加路由请求
 func (s *Server) handleAddRoute(c *gin.Context) {
+	// 1. 定义请求参数结构体
+	// 期望的 JSON 格式：
+	// {
+	//    "path": "/api/v1/new-service",
+	//    "rules": [ { "target": "127.0.0.1:9090", "weight": 100, ... } ]
+	// }
 	var route struct {
 		Path  string              `json:"path" binding:"required"`
 		Rules config.RoutingRules `json:"rules" binding:"required"`
 	}
+	// 2. 解析并校验 JSON 参数
 	if err := c.ShouldBindJSON(&route); err != nil {
 		c.JSON(400, gin.H{"error": "Invalid request payload"})
 		return
 	}
 
+	// 3. 获取当前的全局配置对象
 	cfg := s.ConfigMgr.GetConfig()
 	if cfg.Routing.Rules == nil {
 		cfg.Routing.Rules = make(map[string]config.RoutingRules)
 	}
 
+	// 4. 业务校验：防止重复添加
 	if _, exists := cfg.Routing.Rules[route.Path]; exists {
 		c.JSON(409, gin.H{"error": "Route already exists"})
 		return
 	}
 
+	// 5. 修改配置：将新规则写入内存中的 Map
 	cfg.Routing.Rules[route.Path] = route.Rules
+	// 6. 触发热更新通知！(关键步骤)
+	// 这个方法会将修改后的 cfg 发送到 ConfigChan 通道中。
+	// main.go 中的 refreshConfig 协程会收到通知，重新调用 setupRoutes，让新路由生效。
 	s.ConfigMgr.UpdateConfig(cfg)
 	logger.Info("路由已添加", zap.String("path", route.Path), zap.Any("rules", route.Rules))
 	c.JSON(200, gin.H{"message": "Route added successfully"})
@@ -314,13 +347,17 @@ func (s *Server) handleUpdateRoute(c *gin.Context) {
 
 	path, rules := route.Path, route.Rules
 
+	// 2. 获取配置
 	cfg := s.ConfigMgr.GetConfig()
+	// 3. 业务校验：必须确保路由存在才能更新，否则返回 404
 	if _, exists := cfg.Routing.Rules[path]; !exists {
 		c.JSON(404, gin.H{"error": "Route not found"})
 		return
 	}
 
+	// 4. 覆盖旧规则
 	cfg.Routing.Rules[path] = rules
+	// 5. 触发热更新
 	s.ConfigMgr.UpdateConfig(cfg)
 	logger.Info("路由已更新", zap.String("path", path), zap.Any("rules", rules))
 	c.JSON(200, gin.H{"message": "Route updated successfully"})
@@ -345,7 +382,9 @@ func (s *Server) handleDeleteRoute(c *gin.Context) {
 		return
 	}
 
+	// 3. 从 Map 中删除该键值对
 	delete(cfg.Routing.Rules, path)
+	// 4. 触发热更新
 	s.ConfigMgr.UpdateConfig(cfg)
 	logger.Info("路由已删除", zap.String("path", path))
 	c.JSON(200, gin.H{"message": "Route deleted successfully"})
@@ -353,7 +392,9 @@ func (s *Server) handleDeleteRoute(c *gin.Context) {
 
 // handleListRoutes 处理列出所有路由请求
 func (s *Server) handleListRoutes(c *gin.Context) {
+	// 直接获取配置并返回 Rules 部分
 	cfg := s.ConfigMgr.GetConfig()
+	// 返回 JSON：{ "routes": { "/api/user": [...], "/api/order": [...] } }
 	c.JSON(200, gin.H{"routes": cfg.Routing.Rules})
 }
 
@@ -372,12 +413,16 @@ func (s *Server) handleSaveConfig(c *gin.Context) {
 
 // setupMiddleware 配置中间件
 func (s *Server) setupMiddleware(cfg *config.Config) {
+	// 1. 基础初始化 (包含 Recovery 和 Metrics)
 	s.Router = setupGinRouter(cfg)
 
+	// 2. 缓存中间件 (全局生效)
 	s.Router.Use(middleware.CacheMiddleware()) // 启用缓存中间件
 
+	// 3. 加载插件 (插件本质上也可以是中间件)
 	plugins.LoadPlugins(s.Router, cfg) // 加载自定义插件
 
+	// 4. 安全类中间件 (按需开启)
 	if cfg.Middleware.IPAcl {
 		security.InitIPRules(cfg)
 		s.Router.Use(security.IPAcl()) // IP 访问控制
@@ -386,6 +431,7 @@ func (s *Server) setupMiddleware(cfg *config.Config) {
 		s.Router.Use(security.AntiInjection()) // 防注入攻击
 	}
 
+	// 5. 流量控制中间件
 	if cfg.Middleware.RateLimit {
 		switch cfg.Traffic.RateLimit.Algorithm {
 		case "token_bucket":
@@ -401,6 +447,7 @@ func (s *Server) setupMiddleware(cfg *config.Config) {
 		s.Router.Use(traffic.Breaker()) // 熔断器
 	}
 
+	// 6. 可观测性中间件
 	if cfg.Middleware.Tracing {
 		cleanup := observability.InitTracing(cfg)
 		s.TracingCleanup = cleanup

@@ -51,6 +51,7 @@ func (r *RBACAuthenticator) Authenticate(c *gin.Context) {
 	}
 
 	token := parts[1]
+	// [差异点] 这里调用的是 security.ValidateRBACLoginToken
 	username, valid := security.ValidateRBACLoginToken(token)
 	if !valid {
 		span.SetStatus(codes.Error, "Invalid RBAC token")
@@ -62,9 +63,10 @@ func (r *RBACAuthenticator) Authenticate(c *gin.Context) {
 
 	c.Set("username", username)
 
-	sub := username
-	obj := c.Request.URL.Path
-	act := c.Request.Method
+	// 准备 Casbin 所需的三要素 (Subject, Object, Action)
+	sub := username           // 主体：谁？(e.g., "admin")
+	obj := c.Request.URL.Path // 对象：想访问什么资源？(e.g., "/api/v1/users")
+	act := c.Request.Method   // 动作：想怎么操作？(e.g., "DELETE")
 
 	if !security.CheckPermission(sub, obj, act) {
 		span.SetStatus(codes.Error, "RBAC permission denied")

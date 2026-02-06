@@ -23,28 +23,29 @@ import (
 )
 
 // TargetStatus 后端目标的状态信息
+// 存储在 Redis 里的“病历本”，记录每个后端的详细指标
 type TargetStatus struct {
-	Rule              string    `json:"rule"`
-	URL               string    `json:"url"`
-	Protocol          string    `json:"protocol"`
-	RequestCount      int64     `json:"request_count"`
-	SuccessCount      int64     `json:"success_count"`
-	CacheHitCount     int64     `json:"cache_hit_count"`
-	FailureCount      int64     `json:"failure_count"`
-	ProbeRequestCount int64     `json:"probe_request_count"`
-	ProbeSuccessCount int64     `json:"probe_success_count"`
-	ProbeFailureCount int64     `json:"probe_failure_count"`
-	LastProbeTime     time.Time `json:"last_probe_time"`
-	LastRequestTime   time.Time `json:"last_request_time"`
+	Rule              string    `json:"rule"`                // 归属的路由规则名
+	URL               string    `json:"url"`                 // 后端地址 (127.0.0.1:8080)
+	Protocol          string    `json:"protocol"`            // 协议 (http/grpc)
+	RequestCount      int64     `json:"request_count"`       // 总请求数 (被动转发产生)
+	SuccessCount      int64     `json:"success_count"`       // 成功次数 (200 OK)
+	CacheHitCount     int64     `json:"cache_hit_count"`     // 缓存命中次数
+	FailureCount      int64     `json:"failure_count"`       // 失败次数 (500/502)
+	ProbeRequestCount int64     `json:"probe_request_count"` // 主动探测总次数
+	ProbeSuccessCount int64     `json:"probe_success_count"` // 主动探测成功次数
+	ProbeFailureCount int64     `json:"probe_failure_count"` // 主动探测失败次数
+	LastProbeTime     time.Time `json:"last_probe_time"`     // 上次探测时间
+	LastRequestTime   time.Time `json:"last_request_time"`   // 上次用户请求时间
 }
 
 // HealthChecker 健康检查服务
 type HealthChecker struct {
-	healthPaths map[string]string
-	mu          sync.RWMutex
-	cfg         *config.Config
-	cleanupCh   chan struct{}
-	ctx         context.Context
+	healthPaths map[string]string // 记录每个 IP 对应的检查路径 (如 10.0.0.1 -> /ping)
+	mu          sync.RWMutex      // 读写锁，保护 healthPaths 的并发读写
+	cfg         *config.Config    // 全局配置
+	cleanupCh   chan struct{}     // 信号通道，用来优雅关闭后台协程
+	ctx         context.Context   // 上下文，用于 Redis 操作
 }
 
 // Redis key 前缀
@@ -90,6 +91,8 @@ func InitHealthChecker(cfg *config.Config) *HealthChecker {
 	}
 
 	// 清空 Redis 中所有健康检查和缓存相关键
+	// 1. 清空 Redis 旧数据
+	// 网关重启时，为了防止沿用上次运行留下的脏数据，先来一次大扫除。
 	err := checker.clearRedisKeys()
 	if err != nil {
 		logger.Error("Failed to clear Redis keys", zap.Error(err))
@@ -97,17 +100,23 @@ func InitHealthChecker(cfg *config.Config) *HealthChecker {
 		logger.Info("Cleared all existing health stats and cache keys from Redis")
 	}
 
+	// 2. 加载目标
+	// 把 config.yaml 里的后端列表读进来。
 	checker.RefreshTargets(cfg)
+	// 3. 启动心跳
+	// 开启后台协程，开始周期性巡逻。
 	go checker.startHeartbeat()
 
 	once.Do(func() {
 		globalHealthChecker = checker
 	})
+	// ... 单例模式赋值 ...
 	return checker
 }
 
 // clearRedisKeys 清空 Redis 中所有相关键
 func (h *HealthChecker) clearRedisKeys() error {
+	// 定义要删的前缀：mg:health:*, mg:cache:*
 	patterns := []string{
 		healthStatsPrefix + "*",
 		cachePrefix + "*",
@@ -119,6 +128,8 @@ func (h *HealthChecker) clearRedisKeys() error {
 			return err
 		}
 		if len(keys) > 0 {
+			// 使用 Pipeline (管道) 技术
+			// Pipeline 可以把 100 次删除命令打包成 1 个网络包发给 Redis，极大提升性能。
 			pipe := cache.Client.Pipeline()
 			for _, key := range keys {
 				pipe.Del(h.ctx, key)
@@ -133,15 +144,18 @@ func (h *HealthChecker) clearRedisKeys() error {
 }
 
 // RefreshTargets 刷新目标健康检查路径并初始化 Redis 数据
+// 这个方法把配置文件里的静态规则，转换成 Redis 里的动态状态。
 func (h *HealthChecker) RefreshTargets(cfg *config.Config) {
-	h.mu.Lock()
+	h.mu.Lock() // 写操作，加互斥锁
 	defer h.mu.Unlock()
 
 	h.cfg = cfg
 	h.healthPaths = make(map[string]string)
 
+	// 遍历配置文件里的 rules
 	for ruleName, rules := range cfg.Routing.Rules {
 		for _, rule := range rules {
+			// 归一化：把 "http://127.0.0.1:80" 变成 "127.0.0.1:80"
 			host, err := NormalizeTarget(rule)
 			if err != nil {
 				logger.Error("Invalid target address",
@@ -150,12 +164,14 @@ func (h *HealthChecker) RefreshTargets(cfg *config.Config) {
 				continue
 			}
 
+			// 确定体检路径：如果没配，默认用 "/health"
 			if rule.HealthCheckPath != "" {
 				h.healthPaths[host] = rule.HealthCheckPath
 			} else {
 				h.healthPaths[host] = "/health"
 			}
 
+			// 初始化一个“全零”的状态对象
 			stat := TargetStatus{
 				Rule:              ruleName,
 				URL:               rule.Target,
@@ -168,6 +184,8 @@ func (h *HealthChecker) RefreshTargets(cfg *config.Config) {
 				ProbeFailureCount: 0,
 				LastProbeTime:     time.Time{},
 			}
+			// 保存到 Redis
+			// 这样即使还没流量，Redis 里也能看到这个节点存在了。
 			err = h.saveToRedis(host, &stat)
 			if err != nil {
 				logger.Error("Failed to initialize target in Redis",
@@ -206,6 +224,8 @@ func (h *HealthChecker) saveToRedis(target string, stat *TargetStatus) error {
 
 // loadFromRedis 从 Redis 加载目标状态
 func (h *HealthChecker) loadFromRedis(target string) (*TargetStatus, error) {
+	// 1. 拼 key
+	// 比如 target="127.0.0.1:8080"，生成的 key 可能是 "mg:health:stats:127.0.0.1:8080"
 	key := GetHealthStatsKey(target)
 	data, err := cache.Client.HGetAll(h.ctx, key).Result()
 	if err != nil {
@@ -215,11 +235,20 @@ func (h *HealthChecker) loadFromRedis(target string) (*TargetStatus, error) {
 		return nil, nil
 	}
 
+	// 5. 创建结构体对象
+	// 这里先填那几个本来就是 string 类型的字段。
+	// 因为类型匹配（都是 string），所以不需要转换，直接赋值。
 	stat := &TargetStatus{
-		Rule:     data["rule"],
-		URL:      data["url"],
-		Protocol: data["protocol"],
+		Rule:     data["rule"],     // 比如 "rule_user_service"
+		URL:      data["url"],      // 比如 "127.0.0.1:8080"
+		Protocol: data["protocol"], // 比如 "http"
 	}
+	// 6. 解析 request_count
+	// data["request_count"] 取出来可能是一个字符串 "1005"
+	// strconv.ParseInt: Go 标准库函数，把字符串转成整数。
+	//   - 参数1: 字符串
+	//   - 参数2: 10 (十进制)
+	//   - 参数3: 64 (转成 int64)
 	if v, err := strconv.ParseInt(data["request_count"], 10, 64); err == nil {
 		stat.RequestCount = v
 	}
@@ -258,6 +287,7 @@ func (h *HealthChecker) CheckCache(ctx context.Context, method, path, target str
 	}
 
 	key := GetCacheKey(method, path)
+	// 1. 查缓存内容
 	content, err := cache.Client.Get(ctx, key).Result()
 	if err == redis.Nil {
 		logger.Debug("Cache miss", zap.String("key", key))
@@ -270,6 +300,8 @@ func (h *HealthChecker) CheckCache(ctx context.Context, method, path, target str
 	// 更新缓存命中计数
 	h.mu.Lock()
 	defer h.mu.Unlock()
+	// 2. 如果命中了，更新该后端的“缓存命中数”
+	// 注意：这里是一个读-改-写操作，高并发下有竞争风险，但在统计场景下通常可以容忍微小误差。
 	if stat, err := h.loadFromRedis(target); err == nil && stat != nil {
 		stat.CacheHitCount++
 		h.saveToRedis(target, stat)
@@ -300,6 +332,10 @@ func (h *HealthChecker) SetCache(ctx context.Context, method, path string, conte
 // IncrementRequestCount 增加指定路径的请求计数，返回当前计数
 func (h *HealthChecker) IncrementRequestCount(ctx context.Context, path string, ttl time.Duration) int64 {
 	key := GetPathReqCountKey(path)
+	// 为什么要用 Lua 脚本？
+	// 这里的需求是：如果 key 不存在，就 INCR (变成1)，并且立刻设置过期时间 (EXPIRE)。
+	// 如果不用 Lua，分成两步写，可能第一步成功，第二步网关挂了，导致产生一个“永不过期”的 key (内存泄漏)。
+	// Lua 脚本保证了这两步是原子性的：要么都做，要么都不做。
 	script := redis.NewScript(`
 		local key = KEYS[1]
 		local ttl = ARGV[1]
@@ -338,23 +374,26 @@ func NormalizeTargetHost(target string) (string, error) {
 
 // startHeartbeat 开始周期性心跳检测
 func (h *HealthChecker) startHeartbeat() {
+	// 创建一个打点器，每秒响一次（虽然 ticker 是 1s，但下面有个 Reset 控制实际间隔）
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
-
 	for {
 		select {
-		case <-h.cleanupCh:
+		case <-h.cleanupCh: // 收到停止信号，退出
 			logger.Info("Stopping heartbeat checks")
 			return
-		case <-ticker.C:
+		case <-ticker.C: // 时间到了
 			h.mu.RLock()
+			// 读取配置里的间隔，比如 30秒
 			heartbeatInterval := 30 * time.Second
 			if h.cfg.Routing.HeartbeatInterval > 0 {
 				heartbeatInterval = time.Duration(h.cfg.Routing.HeartbeatInterval) * time.Second
 			}
 			h.mu.RUnlock()
 
+			// 执行一次全面检查
 			h.performHeartbeatCheck()
+			// 重置打点器，30秒后再响
 			ticker.Reset(heartbeatInterval)
 		}
 	}
@@ -369,7 +408,9 @@ func (h *HealthChecker) performHeartbeatCheck() {
 		zap.Int("targetCount", len(h.healthPaths)),
 		zap.String("timestamp", time.Now().Format("2006-01-02 15:04:05")))
 
+	// 遍历所有要检查的目标
 	for target, healthPath := range h.healthPaths {
+		// 1. 先从 Redis 读出旧状态（我们要保留之前的成功/失败次数，只更新 Probe 字段）
 		stat, err := h.loadFromRedis(target)
 		if err != nil || stat == nil {
 			logger.Warn("Failed to load target stats from Redis",
@@ -379,8 +420,10 @@ func (h *HealthChecker) performHeartbeatCheck() {
 
 		now := time.Now()
 		stat.LastProbeTime = now
+		// 2. 探测次数 +1
 		stat.ProbeRequestCount++
 
+		// 3. 根据协议分发检查任务
 		switch stat.Protocol {
 		case "http", "":
 			h.checkHTTP(target, healthPath, stat)
@@ -405,19 +448,24 @@ func (h *HealthChecker) performHeartbeatCheck() {
 
 // checkHTTP 检查 HTTP 目标健康状态
 func (h *HealthChecker) checkHTTP(target, healthPath string, stat *TargetStatus) {
+	// 使用 fasthttp 的对象池，零内存分配
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseRequest(req)
 	defer fasthttp.ReleaseResponse(resp)
 
 	req.SetRequestURI("http://" + target + healthPath)
+	// 构造请求：HEAD http://127.0.0.1:8080/health
+	// 为什么用 HEAD？因为我们只需要知道服务器活着 (状态码 200)，不需要它传回网页内容，省流量。
 	req.Header.SetMethod("HEAD")
 
 	client := &fasthttp.Client{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 5 * time.Second,
 	}
+	// 发送请求，设置 5秒 超时
 	err := client.DoTimeout(req, resp, 5*time.Second)
+	// 判断死活：报错 或者 状态码 >= 400 (比如 404, 500) 都算失败
 	if err != nil || resp.StatusCode() >= 400 {
 		stat.ProbeFailureCount++
 		logger.Warn("HTTP heartbeat check failed",
@@ -510,6 +558,7 @@ func (h *HealthChecker) UpdateRequestCount(target string, success bool) {
 	defer h.mu.Unlock()
 
 	host, _ := NormalizeTargetHost(target)
+	// 1. 读 Redis
 	stat, err := h.loadFromRedis(host)
 	if err != nil || stat == nil {
 		logger.Warn("Target not found in Redis, unable to update request count",
@@ -517,6 +566,7 @@ func (h *HealthChecker) UpdateRequestCount(target string, success bool) {
 		return
 	}
 
+	// 2. 改内存
 	stat.RequestCount++
 	if success {
 		stat.SuccessCount++
@@ -525,6 +575,7 @@ func (h *HealthChecker) UpdateRequestCount(target string, success bool) {
 	}
 	stat.LastRequestTime = time.Now()
 
+	// 3. 写 Redis
 	err = h.saveToRedis(host, stat)
 	if err != nil {
 		logger.Error("Failed to update target stats in Redis",

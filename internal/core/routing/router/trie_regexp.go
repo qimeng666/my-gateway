@@ -49,10 +49,13 @@ func NewTrieRegexpRouter() *TrieRegexpRouter {
 }
 
 func (t *TrieRegexp) Insert(path string, rules config.RoutingRules) {
-	node := t.Root
+	node := t.Root //以此为起点
 	originalPath := path
 
+	// --- 分支 A: 这是一个正则路径吗？ ---
+	// 检查是否包含正则特殊字符 (*, +, ?, etc.)
 	if strings.ContainsAny(path, ".*+?()|[]^$\\") {
+		// 编译正则，加上 ^$ 锚点
 		re, err := regexp.Compile("^" + path + "$")
 		if err != nil {
 			logger.Error("Failed to compile regular expression pattern",
@@ -60,6 +63,10 @@ func (t *TrieRegexp) Insert(path string, rules config.RoutingRules) {
 				zap.Error(err))
 			return
 		}
+		// 【重点关注】
+		// 这里直接把正则规则 append 到了 node.RegexRules。
+		// 因为 node 初始化为 t.Root，且在正则分支里没有下移（没有 node = node.Children[...]）。
+		// 结论：所有的正则规则，实际上都存储在【根节点】的一个列表里。
 		node.RegexRules = append(node.RegexRules, RegexRule{
 			Regex:   re,
 			Pattern: path,
@@ -71,8 +78,11 @@ func (t *TrieRegexp) Insert(path string, rules config.RoutingRules) {
 		return
 	}
 
+	// --- 分支 B: 这是一个静态路径 ---
+	// 标准的 Trie 插入逻辑
 	cleanPath := strings.TrimPrefix(path, "/")
 	for _, ch := range cleanPath {
+		// ... 遍历字符创建节点 ...
 		if node.Children[ch] == nil {
 			node.Children[ch] = &TrieRegexpNode{Children: make(map[rune]*TrieRegexpNode)}
 		}
@@ -90,27 +100,34 @@ func (t *TrieRegexp) Search(ctx context.Context, path string) (config.RoutingRul
 		trace.WithAttributes(attribute.String("path", path)))
 	defer span.End()
 
+	// ... 开启追踪 ...
+
+	// --- 步骤 1: 尝试 Trie 静态匹配 ---
 	node := t.Root
 	cleanPath := strings.TrimPrefix(path, "/")
 
 	for _, ch := range cleanPath {
 		if node.Children[ch] == nil {
-			break
+			break // 树里没这条路，跳出循环
 		}
 		node = node.Children[ch]
 	}
+	// 如果走完了静态路径，且这里是一个已注册的终点
 	if node != nil && node.IsEnd {
 		return node.Rules, true
-	}
+	} // 【命中静态路由，直接返回】
 
 	// 检查所有正则规则
+	// --- 步骤 2: 静态没命中，兜底查正则 ---
+	// 检查所有正则规则 (t.Root.RegexRules)
+	// 注意：这里的 t.Root.RegexRules 对应了 Insert 时全部存在 Root 的逻辑
 	for _, regexRule := range t.Root.RegexRules {
 		if regexRule.Regex.MatchString(path) {
 			return regexRule.Rules, true
-		}
+		} // 【命中正则路由】
 	}
 
-	return nil, false
+	return nil, false // 彻底没找到
 }
 
 func (tr *TrieRegexpRouter) Setup(r gin.IRouter, httpProxy *proxy.HTTPProxy, cfg *config.Config) {

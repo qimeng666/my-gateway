@@ -16,6 +16,10 @@ import (
 var (
 	enforcer   *casbin.Enforcer          // Casbin 权限执行器
 	tokenStore = make(map[string]string) // 存储 RBAC 登录 Token 的映射
+	//tokenStore: 注意这里！这与 JWT 完全不同。
+	//JWT 是 无状态 的，用户信息加密在 Token 字符串里，服务器不存。
+	//这里实现的 RBAC Token 是 有状态 的（Session 模式）。
+	//服务器在内存里记了一个账本："abc-123" -> "admin"。如果服务器重启，这个 map 会清空，所有人都得重新登录。
 )
 
 // InitRBAC 初始化 Casbin RBAC 规则
@@ -48,6 +52,7 @@ func InitRBAC(cfg *config.Config) error {
 // GenerateRBACLoginToken 生成基于机器 ID 的 RBAC 登录 Token
 func GenerateRBACLoginToken(username string) (string, error) {
 	// 获取机器唯一 ID
+	// 1. 搞点随机性：机器ID + 用户名 + 时间戳
 	machineID, err := machineid.ProtectedID("mini-gateway")
 	if err != nil {
 		logger.Error("Failed to obtain machine ID",
@@ -59,6 +64,7 @@ func GenerateRBACLoginToken(username string) (string, error) {
 	rawToken := fmt.Sprintf("%s-%s-%d", machineID, username, time.Now().UnixNano())
 
 	// 计算 SHA256 哈希并编码为 Base64
+	// 2. 生成一个乱码字符串 (Token)
 	hash := sha256.Sum256([]byte(rawToken))
 	token := base64.URLEncoding.EncodeToString(hash[:])
 
